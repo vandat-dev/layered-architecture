@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # Application
+  app-server:
+    build:
+      context: ../../
+      dockerfile: deployment/dev/Dockerfile
+    container_name: app-server-dev
+    ports:
+      - "8000:8000"
+    environment:
+      - SERVER_PORT=8000
+      - SERVER_MODE=dev
+      - SYSTEM_DEFAULT_PASSWORD=Rsc@12345
+
+      - POSTGRES_HOST=172.17.0.1
+      - POSTGRES_PORT=5433
+      - POSTGRES_USERNAME=admin
+      - POSTGRES_PASSWORD=123123
+      - POSTGRES_DATABASE=system
+      - POSTGRES_SSLMODE=disable
+      - POSTGRES_MAX_IDLE_CONN=10
+      - POSTGRES_MAX_OPEN_CONN=100
+      - POSTGRES_CONN_MAX_LIFETIME=1800
+      - REDIS_HOST=localhost
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - REDIS_DATABASE=0
+      - LOG_LEVEL=debug
+      - LOG_FILE_NAME=/app/storages/logs/development.xxx.log
+      - LOG_MAX_SIZE=500
+      - LOG_MAX_BACKUPS=3
+      - LOG_MAX_AGE=28
+      - LOG_COMPRESS=true
+      - JWT_SECRET_KEY=your-super-secret
+      - JWT_TOKEN_EXPIRY=72h
+      - JWT_REFRESH_EXPIRY=168h
+      - KAFKA_HOST=100.86.59.89
+      - KAFKA_PORT=9096
+      - KAFKA_TOPICS=user_topic,worker_topic
+      - KAFKA_GROUP_ID=user_group
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_BUCKET_NAME=images
+      - MINIO_USE_SSL=false
+    volumes:
+      - app_logs:/app/storages/logs
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  app_logs:
+
+networks:
+  app-network:
+    driver: bridge

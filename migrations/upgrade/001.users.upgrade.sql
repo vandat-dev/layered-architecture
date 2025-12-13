@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    full_name VARCHAR(100),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(20),
+    gender VARCHAR(15),
+    address VARCHAR(100),
+    system_role VARCHAR NOT NULL DEFAULT 'USER',
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
