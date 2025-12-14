@@ -19,6 +19,193 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/delivery-frame/folder": {
+            "delete": {
+                "description": "Delete the folder associated with a scan from MinIO",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "delivery-frame"
+                ],
+                "summary": "Delete scan folder",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Scan ID",
+                        "name": "scan_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/delivery-frame/images": {
+            "get": {
+                "description": "Retrieve a list of image URLs for a specific scan",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "delivery-frame"
+                ],
+                "summary": "Get images for a scan",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Scan ID",
+                        "name": "scan_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/delivery-frame/scan": {
+            "post": {
+                "description": "Create a new scan record and return the scan details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "delivery-frame"
+                ],
+                "summary": "Create a new scan",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ScanResponseDto"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/delivery-frame/upload": {
+            "post": {
+                "description": "Upload an image to MinIO and update the scan record",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "delivery-frame"
+                ],
+                "summary": "Upload an image for a scan",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Device ID",
+                        "name": "device_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Scan ID",
+                        "name": "scan_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Image File",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/user/create_user": {
             "post": {
                 "security": [
@@ -560,6 +747,50 @@ const docTemplate = `{
                     ]
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ScanResponseDto": {
+            "type": "object",
+            "properties": {
+                "confidence_score": {
+                    "type": "number"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "diagnosis_notes": {
+                    "type": "string"
+                },
+                "hospital_id": {
+                    "type": "string"
+                },
+                "hydronephrosis_detected": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image_path": {
+                    "type": "string"
+                },
+                "national_id": {
+                    "type": "string"
+                },
+                "patient_id": {
+                    "type": "string"
+                },
+                "scan_date": {
+                    "type": "string"
+                },
+                "stone_detected": {
+                    "type": "boolean"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "video_path": {
                     "type": "string"
                 }
             }

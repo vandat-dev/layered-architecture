@@ -13,6 +13,7 @@ const (
 	ErrCodeInternalError        = 5000  // Internal server error
 	ErrCodeInvalidData          = 4221  // Invalid request data
 	ErrCodeUnauthorized         = 4010  // Unauthorized
+	ErrCodeDataNotFound         = 4009  // Data not found
 )
 
 var (
@@ -32,6 +33,7 @@ var (
 		ErrCodeUserNotFound:         "USER_NOT_FOUND",
 		ErrCodeAccountLock:          "USER_ACCOUNT_LOCKED",
 		ErrCodeUserPermissionDenied: "YOU_DO_NOT_HAVE_PERMISSION_TO_INTERACT_WITH_THIS_USER",
+		ErrCodeDataNotFound:         "DATA_NOT_FOUND",
 	}
 )
 

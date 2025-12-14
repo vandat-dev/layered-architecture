@@ -28,6 +28,9 @@ func InitRouter() *gin.Engine {
 	MainGroup := r.Group("/api")
 	{
 		userRouter.InitUserRouter(MainGroup)
+
+		deliveryRouter := routers.RouterGroupApp.DeliveryFrame
+		deliveryRouter.InitScanRouter(MainGroup)
 	}
 
 	// Swagger endpoint - với CORS đã được áp dụng

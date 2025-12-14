@@ -7,7 +7,6 @@ tests/*.pyc
 
 app
 vendor
-server
 
 .env
 .venv/

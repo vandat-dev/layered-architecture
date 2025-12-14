@@ -57,6 +57,35 @@ definitions:
     - role
     - username
     type: object
+  dto.ScanResponseDto:
+    properties:
+      confidence_score:
+        type: number
+      created_at:
+        type: string
+      diagnosis_notes:
+        type: string
+      hospital_id:
+        type: string
+      hydronephrosis_detected:
+        type: boolean
+      id:
+        type: string
+      image_path:
+        type: string
+      national_id:
+        type: string
+      patient_id:
+        type: string
+      scan_date:
+        type: string
+      stone_detected:
+        type: boolean
+      updated_at:
+        type: string
+      video_path:
+        type: string
+    type: object
   dto.UserListResponseDto:
     properties:
       data:
@@ -132,6 +161,130 @@ info:
   title: Go API
   version: "1.0"
 paths:
+  /delivery-frame/folder:
+    delete:
+      consumes:
+      - application/json
+      description: Delete the folder associated with a scan from MinIO
+      parameters:
+      - description: Scan ID
+        in: query
+        name: scan_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete scan folder
+      tags:
+      - delivery-frame
+  /delivery-frame/images:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of image URLs for a specific scan
+      parameters:
+      - description: Scan ID
+        in: query
+        name: scan_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get images for a scan
+      tags:
+      - delivery-frame
+  /delivery-frame/scan:
+    post:
+      consumes:
+      - application/json
+      description: Create a new scan record and return the scan details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.ScanResponseDto'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create a new scan
+      tags:
+      - delivery-frame
+  /delivery-frame/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload an image to MinIO and update the scan record
+      parameters:
+      - description: Device ID
+        in: formData
+        name: device_id
+        required: true
+        type: string
+      - description: Scan ID
+        in: formData
+        name: scan_id
+        required: true
+        type: string
+      - description: Image File
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Upload an image for a scan
+      tags:
+      - delivery-frame
   /user/create_user:
     post:
       consumes:
